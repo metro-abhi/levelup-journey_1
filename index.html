@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Level Up Journey · Digital Commerce FY26</title>
+<meta name="description" content="Digital Commerce FY26 review as an interactive customer journey. Internal.">
+<meta name="theme-color" content="#002D72">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23002D72'/%3E%3Cpath d='M8 2l5 6H10v6H6V8H3z' fill='%23FFD100'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-label="Enter access code">
+  <div class="gbg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <form class="gbox" id="gform" autocomplete="off">
+    <div class="gtag pix">DIGITAL COMMERCE · FY26</div>
+    <h1 class="pix">Level Up</h1>
+    <p class="gsub">Enter the 6-digit code to start the journey</p>
+    <div class="gdots" id="gdots" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></div>
+    <input id="gin" class="gin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" aria-label="6-digit code">
+    <div class="gpad" id="gpad"><button type="button" class="pix" data-d="1">1</button><button type="button" class="pix" data-d="2">2</button><button type="button" class="pix" data-d="3">3</button><button type="button" class="pix" data-d="4">4</button><button type="button" class="pix" data-d="5">5</button><button type="button" class="pix" data-d="6">6</button><button type="button" class="pix" data-d="7">7</button><button type="button" class="pix" data-d="8">8</button><button type="button" class="pix" data-d="9">9</button><button type="button" class="pix alt" data-d="c" aria-label="Clear">C</button><button type="button" class="pix" data-d="0">0</button><button type="submit" class="pix go" aria-label="Enter">&#9654;</button></div>
+    <div class="gmsg pix" id="gmsg" aria-live="polite"></div>
+  </form>
+</div>
+<script>
+(function(){
+  var g=document.getElementById('gate'),inp=document.getElementById('gin'),dots=document.querySelectorAll('#gdots b'),msg=document.getElementById('gmsg'),box=document.getElementById('gform');
+  
+  function fnv(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return h.toString(16)}
+  function hash(s){var t='lvl-'+s+'-23.11';if(window.crypto&&crypto.subtle&&window.TextEncoder){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')})}return Promise.resolve('f'+fnv(t))}
+  var OK=['ae975843ac3bcd87d8c2438d7c36786ad937cea6bbe2cdac44280155e8811dde','f6b4108c1'];
+  function ok(){document.documentElement.classList.add('unlocked');g.classList.add('out');try{sessionStorage.setItem('lvl-ok','1')}catch(e){}setTimeout(function(){g.remove();var s=document.getElementById('stage');if(s)s.focus&&s.focus()},700)}
+  try{if(sessionStorage.getItem('lvl-ok')==='1'){document.documentElement.classList.add('unlocked');g.remove();return}}catch(e){}
+  function paint(){dots.forEach(function(d,i){d.className=i<inp.value.length?'on':''})}
+  function check(){hash(inp.value).then(function(h){if(OK.indexOf(h)>-1){msg.textContent='Welcome, chef!';ok()}else{msg.textContent='Wrong code';box.classList.remove('shake');void box.offsetWidth;box.classList.add('shake');inp.value='';paint()}})}
+  inp.addEventListener('input',function(){inp.value=inp.value.replace(/\D/g,'');msg.textContent='';paint();if(inp.value.length===6)check()});
+  document.getElementById('gpad').addEventListener('click',function(e){var b=e.target.closest('button');if(!b||b.type==='submit')return;var d=b.dataset.d;if(d==='c')inp.value='';else if(inp.value.length<6)inp.value+=d;msg.textContent='';paint();if(inp.value.length===6)check();inp.focus({preventScroll:true})});
+  box.addEventListener('submit',function(e){e.preventDefault();if(inp.value.length===6)check()});
+  ['keydown','keyup','keypress','wheel','touchstart','touchend'].forEach(function(ev){g.addEventListener(ev,function(e){e.stopPropagation()},{passive:true})});
+  g.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowLeft'||e.key===' ')e.stopPropagation()});
+  setTimeout(function(){inp.focus({preventScroll:true})},50);
+})();
+</script>
+
+<main class="stage" id="stage" aria-label="Level Up: the customer journey">
+  <canvas id="scene" width="480" height="270" aria-hidden="true"></canvas>
+  <div class="fx" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="plate" id="plate"></div>
+  <div class="bubble pix" id="bubble" hidden></div>
+  <div class="ghud pix" id="ghud" hidden></div>
+  <div class="intro" id="intro" aria-hidden="true"></div>
+  <section class="panel" id="panel" aria-live="polite"></section>
+  <header class="hud" id="hud"></header>
+  <nav class="nav" aria-label="Slide navigation">
+    <button id="prev" aria-label="Previous">&#9664;</button>
+    <button id="next" aria-label="Next">&#9654;</button>
+    <button id="peek" class="wide" aria-pressed="false" title="Show the scene without the slide (V)">View scene</button>
+    <button id="play" class="wide" title="Optional mini-game (G)">Play</button>
+    <button id="stepb" class="wide" aria-pressed="true" title="Step through each part of a slide with the arrow keys (S)">Spotlight on</button>
+  </nav>
+  <div class="bar"><i id="bar"></i></div>
+  <div class="lb" id="lb" hidden>
+    <button class="lbn" id="lbp" aria-label="Previous image">&#9664;</button>
+    <figure><img alt=""><figcaption></figcaption></figure>
+    <button class="lbn" id="lbx" aria-label="Next image">&#9654;</button>
+  </div>
+</main>
+<script src="data.js"></script>
+<script src="art.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
